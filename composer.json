@@ -5,6 +5,9 @@
   "keywords": ["relevant","tags","go","here"],
   "homepage": "https://ontavio.de",
   "license": "MIT",
+  "require": {
+    "php": "^7.2",
+  },
   "authors": [
     {
       "name": "André Scholz",
