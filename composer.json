@@ -1,0 +1,16 @@
+{
+  "name": "sneaky/wordpress-api-client",
+  "type": "library",
+  "description": "Wordpress login connector with cookie login.",
+  "keywords": ["relevant","tags","go","here"],
+  "homepage": "https://ontavio.de",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "André Scholz",
+      "email": "andre.scholz@ontavio.de",
+      "homepage": "http://ontavio.de",
+      "role": "DevOps"
+    }
+  ]
+}
