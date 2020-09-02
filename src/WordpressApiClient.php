@@ -3,7 +3,8 @@
 namespace WordpressApiClient;
 
 
-class WordpressApiClient{
+class WordpressApiClient
+{
 
     /**
      * @var string
@@ -23,14 +24,14 @@ class WordpressApiClient{
     public function __construct($username, $password, $basicUrl)
     {
         // correct basicurl-> add trailing slash
-        if (substr($basicUrl,-1)!=='/'){
-            $basicUrl.="/";
+        if (substr($basicUrl, -1) !== '/') {
+            $basicUrl .= "/";
         }
-        $this->basicUrl=$basicUrl;
+        $this->basicUrl = $basicUrl;
 
         // urlencode username and password
-        $password=urlencode($password);
-        $username=urlencode($username);
+        $password = urlencode($password);
+        $username = urlencode($username);
 
         // login
         $this->curlHandler = curl_init("{$basicUrl}wp-login.php");
@@ -51,10 +52,13 @@ class WordpressApiClient{
     }
 
     /**
+     * simple return api data by get call
+     *
      * @param string $path
-     * @return bool|string
+     * @param bool $returnAsArray
+     * @return bool|mixed|string
      */
-    public function getApiData($path='posts')
+    public function getApiData($path = 'posts', $returnAsArray = true)
     {
         curl_setopt_array($this->curlHandler, array(
             CURLOPT_URL => "{$this->basicUrl}/wp-json/wp/v2/{$path}",
@@ -62,6 +66,11 @@ class WordpressApiClient{
             CURLOPT_HEADER => 0,
         ));
         $result = curl_exec($this->curlHandler);
+        if ($returnAsArray===true){
+            // return as array
+            return json_decode($result,true);
+        }
+        // return as json
         return $result;
     }
 
