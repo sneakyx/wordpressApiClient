@@ -2,11 +2,13 @@
   "name": "sneaky/wordpress-api-client",
   "type": "library",
   "description": "Wordpress login connector with cookie login.",
-  "keywords": ["relevant","tags","go","here"],
+  "keywords": ["wordpress","api","cookie","login"],
   "homepage": "https://ontavio.de",
   "license": "MIT",
   "require": {
-    "php": "^7.2"
+    "php": "^7.2",
+    "ext-curl": "*",
+    "ext-http": "*"
   },
   "authors": [
     {
