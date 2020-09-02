@@ -28,6 +28,10 @@ class WordpressApiClient{
         }
         $this->basicUrl=$basicUrl;
 
+        // urlencode username and password
+        $password=urlencode($password);
+        $username=urlencode($username);
+
         // login
         $this->curlHandler = curl_init("{$basicUrl}wp-login.php");
         curl_setopt($this->curlHandler, CURLOPT_RETURNTRANSFER, 1);
