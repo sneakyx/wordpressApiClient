@@ -2,7 +2,6 @@
 
 namespace Ontavio\WordpressApiClient;
 
-use http\Client;
 
 class WordpressApiClient{
 
@@ -23,7 +22,6 @@ class WordpressApiClient{
      */
     public function __construct($username, $password, $basicUrl)
     {
-        $this->httpClient=new Client();
         // correct basicurl-> add trailing slash
         if (substr($basicUrl,-1)!=='/'){
             $basicUrl.="/";
