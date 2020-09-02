@@ -1,6 +1,6 @@
 <?php
 
-namespace Ontavio\WordpressApiClient;
+namespace WordpressApiClient;
 
 
 class WordpressApiClient{

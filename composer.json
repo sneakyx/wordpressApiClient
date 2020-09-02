@@ -16,5 +16,10 @@
       "homepage": "http://ontavio.de",
       "role": "DevOps"
     }
-  ]
+  ],
+  "autoload": {
+    "psr-4": {
+      "WordpressApiClient\\": "src/"
+    }
+  }
 }
