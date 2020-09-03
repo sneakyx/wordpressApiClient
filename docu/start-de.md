@@ -1,4 +1,4 @@
-## Benutzung
+## Verwendung
 
 Derzeit gibt es 3 Funktionen
 

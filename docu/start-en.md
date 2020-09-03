@@ -19,7 +19,7 @@ This should work for all get requests- I tested it for `posts`, `users`and `cate
 
 `$wordpressApiClient->getOrderedCategories()` returns all categories and meta infos about how they are connected. 
 The wordpress API only returns 1.generation parent, here you get also all grand- and great-grandparents (and before) - in key `ancestors` (right path order) and the `depth` of category.
-The info about deüpth can be directly used for css-alignment-infos.
+The info about depth can be directly used for css-alignment-infos.
 You get also the direct `children` (1. generation) and all `successors` (all generations). This can be used for a special search (see next chapter).
 
 ### get all /filtered posts
