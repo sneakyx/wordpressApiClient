@@ -16,6 +16,8 @@ class WordpressApiClient
      */
     private $curlHandler;
 
+    private $sortedCategories = null;
+
     /**
      * WordpressApiClient constructor.
      * @param $username
@@ -66,12 +68,81 @@ class WordpressApiClient
             CURLOPT_HEADER => 0,
         ));
         $result = curl_exec($this->curlHandler);
-        if ($returnAsArray===true){
+        if ($returnAsArray === true) {
             // return as array
-            return json_decode($result,true);
+            return json_decode($result, true);
         }
         // return as json
         return $result;
     }
 
+    /**
+     * getter method for orderd categories with parent, children, successors and ancestors
+     * @return null
+     */
+    public function getOrderedCategories()
+    {
+        // lazy loading, do api request only when there is nothing loaded yet
+        if ($this->sortedCategories === null) {
+            // if not loaded yet, load categories
+            $sortedCategories = array();
+
+            // get data from wordpress api
+            $unsortedCategories = $this->getApiData('categories?per_page=100&orderby=id&_fields=id,name,slug,parent,meta');
+
+            // set key from id
+            foreach ($unsortedCategories as &$category) {
+                $sortedCategories[$category['id']] = $category;
+                if ($category['parent'] === 0) {
+                    // if it is a main category, remove reference to non-existing category 0
+                    $sortedCategories[$category['id']]['parent'] = null;
+                }
+            }
+
+            // create ancerstors path
+            foreach ($sortedCategories as &$sortedCategory) {
+                $sortedCategory['ancestors'] = $this->recursiveFindPathAndAncestors($sortedCategories, $sortedCategory['id']);
+                $sortedCategory['depth'] = count($sortedCategory['ancestors']);
+            }
+            // remove reference - see https://www.php.net/manual/en/control-structures.foreach.php
+            unset($sortedCategory);
+
+            // add ancestors and (direct) children to categories
+            foreach ($sortedCategories as $sortedCategory) {
+                // not neccessary, main categories doesn't have ancestors/ parents
+                if ($sortedCategory['depth'] > 0) {
+                    // childrens are first-level children only, no grandchildren or great-(great-...)-children
+                    $sortedCategories[$sortedCategory['parent']]['children'][] = $sortedCategory['id'];
+                    foreach ($sortedCategory['ancestors'] as $ancestorId) {
+                        // add to succesor list of all successors
+                        $sortedCategories[$ancestorId]['successors'][] = $sortedCategory['id'];
+                    }
+                }
+            }
+
+        }
+
+        return $this->sortedCategories;
+    }
+
+    /**
+     * @param $sortedCategories
+     * @param $id
+     * @return array
+     */
+    private function recursiveFindPathAndAncestors($sortedCategories, $id)
+    {
+        if (empty($sortedCategories[$id]['ancestors']) === false) {
+            return $sortedCategories[$id]['ancestors'];
+        } else {
+
+            if ($sortedCategories[$id]['parent'] === null) {
+                return array();
+            } else {
+                $recursiveAnswer = $this->recursiveFindPathAndAncestors($sortedCategories, $sortedCategories[$id]['parent']);
+                $recursiveAnswer[] = $sortedCategories[$id]['parent'];
+                return $recursiveAnswer;
+            }
+        }
+    }
 }
