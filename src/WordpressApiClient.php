@@ -119,13 +119,14 @@ class WordpressApiClient
                     }
                 }
             }
+            $this->sortedCategories = $sortedCategories;
 
         }
-
         return $this->sortedCategories;
     }
 
     /**
+     * recursive function to add ancestors info to list of categories- this is also necessary for generating succesors info later
      * @param $sortedCategories
      * @param $id
      * @return array
@@ -144,5 +145,46 @@ class WordpressApiClient
                 return $recursiveAnswer;
             }
         }
+    }
+
+    /**
+     * @param array|null $categories
+     * @param bool $withSuccessorsCategories
+     * @param array|null $parameters   // use parameters as array: ['parameter1'=>'value1']
+     * @return bool|mixed|string
+     */
+    public function getPosts(array $categories = null, $withSuccessorsCategories = true, array $parameters = null)
+    {
+        // initalize search string
+        $searchString = "";
+        if (empty($categories) === false) {
+            $orderedCategories = $this->getOrderedCategories();
+            foreach ($categories as $category) {
+                // add this category
+                $categoriesForSearch[] = $category;
+                if ($withSuccessorsCategories === true) {
+                    // add all successors for this category
+                    $categoriesForSearch = array_merge($categoriesForSearch, $orderedCategories[$category]['successors']);
+                }
+            }
+            // filter double values
+            $categoriesForSearch = array_unique($categoriesForSearch);
+            // generate full string for search / filter
+            $searchString = "category=" . implode('&category=', $categoriesForSearch);
+
+            // we cannot move this if request out of this if request
+            if (empty($parameters) === false) {
+                // the string has to be set only
+                $searchString .="&";
+            }
+        }
+
+        // add other parameters to search string
+        if (empty($parameters) === false) {
+            $searchString.= http_build_query($parameters,'','&');
+        }
+
+        // get and return the api data
+        return $this->getApiData("posts?{$searchString}");
     }
 }
