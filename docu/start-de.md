@@ -31,7 +31,7 @@ Wird die Funktion ohne weitere Parameter eingesetzt, kommen die 10 neusten Beitr
 
 Der erste Parameter ist der Kategorienfilter, es muss ein **Array** mit IDs angegeben werden (auch bei nur einer ID).
 
-Der zweite Parameter sorgt dafür, dass auch innerhalb der Unterkategorien nach paasenden Beiträgen gesucht wird. 
+Der zweite Parameter sorgt dafür, dass auch innerhalb der Unterkategorien nach passenden Beiträgen gesucht wird. 
 Standard ist `true`- soll nur genau in dieser einen Kategorie gesucht werden, muss `false` gesetzt werden. 
 
 Der dritte Parameter soll genutzt werden, um weitere (Filter-)Parameter anzuhängen- und wird so benutzt:
