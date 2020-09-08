@@ -5,8 +5,8 @@ Derzeit gibt es 3 Funktionen
 ### Login
 Für das Login muss zunächst ein Objekt erzeugt werden:
 
-`$wordpressApiClient = new WordpressApiClient('username', 'password', 'https://your-wordpress-basic.url');`
-Der Konstruktor loggt sich direkt ein, weitere Requests sind nun möglich.
+`$wordpressApiClient = new WordpressApiClient('username', 'password', 'https://your-wordpress-basic.url', array('Filter', 'für', 'Hauptkategorien'));`
+Der Konstruktor loggt sich direkt ein, weitere Requests sind nun möglich. Mit Hilfe des vierten Parameters ist es möglich, den Zugriff auf eine bestimmte Hauptkategorie (und deren Unterkategorien) einzuschränken.
 
 ### Beliebige Abfrage
 `$wordpressApiClient->getApiData($path,$returnAsArray)`
@@ -27,7 +27,7 @@ Alle Kinder und (Ur-...)Enkel sind über `successors` aufrufbar. Dies wird für 
 
 ### Alle Beiträge oder bestimmte Beiträge zurückgeben 
 `$wordpressApiclient->getPosts()` hat viele Einsatzgebiete.
-Wird die Funktion ohne weitere Parameter eingesetzt, kommen die 10 neusten Beiträge zurück.
+Wird die Funktion ohne weitere Parameter eingesetzt, kommen die 10 neusten Beiträge zurück- wenn beim Konstruktor eine Einschränkung für die Hauptkategorie hinzugefügt wurd, kommen nur die Beiträge aus dieser Kategorie (oder einer der Unterkategorien zurück).
 
 Der erste Parameter ist der Kategorienfilter, es muss ein **Array** mit IDs oder slugs (auch gemischt) angegeben werden (auch bei nur einer ID/einem slug).
 Die deutsche Wordpress-Version spricht hier übrigens von "Titelform".

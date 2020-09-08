@@ -4,8 +4,8 @@ At the moment, there are 3 functions implemented:
 ### Login
 First, you have to create a new WordpressApiClient-Object:
 
-`$wordpressApiClient = new WordpressApiClient('username', 'password', 'https://your-wordpress-basic.url');`
-The connector connects directly to the api and all other requests are now possible.
+`$wordpressApiClient = new WordpressApiClient('username', 'password', 'https://your-wordpress-basic.url', array('restrict','to','some','main categories'));`
+The connector connects directly to the api and all other requests are now possible. The fourth parameter sets a restriction to main categories. (You can use ids or slugs.) 
 
 ### Simple request
 `$wordpressApiClient->getApiData($path,$returnAsArray)`
@@ -24,7 +24,7 @@ You get also the direct `children` (1. generation) and all `successors` (all gen
 
 ### get all /filtered posts
 `$wordpressApiclient->getPosts()` is a very powerfull function.
-If You use it without any parameters, you get 10  posts by the api (see Wordpress-API pagination).
+If You use it without any parameters, you get 10  posts by the api (see Wordpress-API pagination). If the filter for main categories is set, only posts from these categories (and successor categories) are returned.
 
 The first parameter is a filter for categories. You have go give an **array** of category-ids and/or category-slugs. 
 
