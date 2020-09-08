@@ -16,14 +16,24 @@ class WordpressApiClient
      */
     private $curlHandler;
 
+    /**
+     * @var null|array
+     */
     private $sortedCategories = null;
 
     /**
-     * WordpressApiClient constructor.
-     * @param $username
-     * @param $password
+     * @var null|array
      */
-    public function __construct($username, $password, $basicUrl)
+    private $restrictedRootCategories = null;
+
+    /**
+     * WordpressApiClient constructor.
+     * @param $username // wordpress username
+     * @param $password // wordpress password
+     * @param $basicUrl // basic URL with or without trailing slash
+     * @param null $restrictedRootCategories // if you want to restric to one or more root categories, provide IDs or slugs
+     */
+    public function __construct($username, $password, $basicUrl, $restrictedRootCategories = null)
     {
         // correct basicurl-> add trailing slash
         if (substr($basicUrl, -1) !== '/') {
@@ -51,6 +61,9 @@ class WordpressApiClient
 
         // set cookies for further requests
         curl_setopt($this->curlHandler, CURLOPT_COOKIE, implode('; ', $cookies));
+
+        // set restrictedRootCategories
+        $this->restrictedRootCategories = $restrictedRootCategories;
     }
 
     /**
@@ -77,7 +90,7 @@ class WordpressApiClient
     }
 
     /**
-     * getter method for orderd categories with parent, children, successors and ancestors
+     * getter method for ordered categories with parent, children, successors and ancestors
      * @return null
      */
     public function getOrderedCategories()
@@ -118,7 +131,31 @@ class WordpressApiClient
                     }
                 }
             }
-            $this->sortedCategories = $sortedCategories;
+
+            // filter restrictedRootCategories if neccessary
+            if (empty($this->restrictedRootCategories) === false) {
+                $filteredCategories = [];
+                $categoriesSlugs = array_column($sortedCategories, 'slug', 'id');
+                foreach ($this->restrictedRootCategories as $restrictedRootCategory) {
+                    // correct root categories
+                    if (is_int($restrictedRootCategory) === false) {
+                        $restrictedRootCategory = array_search($restrictedRootCategory, $categoriesSlugs);
+                    }
+                    // check if slug was found
+                    if (empty($restrictedRootCategory) === false) {
+                        // add this 'root' category
+                        $filteredCategories[$restrictedRootCategory] = $sortedCategories[$restrictedRootCategory];
+                        foreach ($sortedCategories[$restrictedRootCategory]['successors'] as $successor) {
+                            // add successor
+                            $filteredCategories[$successor] = $sortedCategories[$successor];
+                        }
+                    }
+                }
+                // don't use full array, just the filtered categories
+                $this->sortedCategories = $filteredCategories;
+            } else {
+                $this->sortedCategories = $sortedCategories;
+            }
 
         }
         return $this->sortedCategories;
@@ -156,7 +193,14 @@ class WordpressApiClient
     {
         // initalize search string
         $searchString = "";
-        if (empty($categories) === false) {
+
+        // when there is a restriction, ensure there is a lazy load of categories
+        if (empty($categories) === true) {
+            $categories = $this->restrictedRootCategories;
+        }
+
+        // filter by category if necessary
+        if (empty($categories) === false || empty($this->restrictedRootCategories) === false) {
             $orderedCategories = $this->getOrderedCategories();
             $categoriesSlugs = array_column($orderedCategories, 'slug', 'id');
             foreach ($categories as $category) {
@@ -191,7 +235,6 @@ class WordpressApiClient
         if (empty($parameters) === false) {
             $searchString .= http_build_query($parameters, '', '&');
         }
-
         // get and return the api data
         return $this->getApiData("posts?{$searchString}");
     }
