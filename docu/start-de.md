@@ -29,7 +29,8 @@ Alle Kinder und (Ur-...)Enkel sind über `successors` aufrufbar. Dies wird für 
 `$wordpressApiclient->getPosts()` hat viele Einsatzgebiete.
 Wird die Funktion ohne weitere Parameter eingesetzt, kommen die 10 neusten Beiträge zurück.
 
-Der erste Parameter ist der Kategorienfilter, es muss ein **Array** mit IDs angegeben werden (auch bei nur einer ID).
+Der erste Parameter ist der Kategorienfilter, es muss ein **Array** mit IDs oder slugs (auch gemischt) angegeben werden (auch bei nur einer ID/einem slug).
+Die deutsche Wordpress-Version spricht hier übrigens von "Titelform".
 
 Der zweite Parameter sorgt dafür, dass auch innerhalb der Unterkategorien nach passenden Beiträgen gesucht wird. 
 Standard ist `true`- soll nur genau in dieser einen Kategorie gesucht werden, muss `false` gesetzt werden. 

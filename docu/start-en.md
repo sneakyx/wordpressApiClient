@@ -24,9 +24,9 @@ You get also the direct `children` (1. generation) and all `successors` (all gen
 
 ### get all /filtered posts
 `$wordpressApiclient->getPosts()` is a very powerfull function.
-If You use it without any parameters, you get ~~all~~ 10 (pagination(!)) posts by the api.
+If You use it without any parameters, you get 10  posts by the api (see Wordpress-API pagination).
 
-The first parameter is a filter for categories. You have go give an **array** of category-ids. 
+The first parameter is a filter for categories. You have go give an **array** of category-ids and/or category-slugs. 
 
 The second parameter adds all successors to the filter-categories, so if you have for example a category "news" with subcategories "computer", 
 "electronics", just add the id of "news" to get all posts- even from the subcategories.

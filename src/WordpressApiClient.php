@@ -63,7 +63,7 @@ class WordpressApiClient
     public function getApiData($path = 'posts', $returnAsArray = true)
     {
         curl_setopt_array($this->curlHandler, array(
-            CURLOPT_URL => "{$this->basicUrl}/wp-json/wp/v2/{$path}",
+            CURLOPT_URL => "{$this->basicUrl}wp-json/wp/v2/{$path}",
             CURLOPT_POST => 0,
             CURLOPT_HEADER => 0,
         ));
@@ -89,7 +89,6 @@ class WordpressApiClient
 
             // get data from wordpress api
             $unsortedCategories = $this->getApiData('categories?per_page=100&orderby=id&_fields=id,name,slug,parent,meta');
-
             // set key from id
             foreach ($unsortedCategories as &$category) {
                 $sortedCategories[$category['id']] = $category;
@@ -150,7 +149,7 @@ class WordpressApiClient
     /**
      * @param array|null $categories
      * @param bool $withSuccessorsCategories
-     * @param array|null $parameters   // use parameters as array: ['parameter1'=>'value1']
+     * @param array|null $parameters // use parameters as array: ['parameter1'=>'value1']
      * @return bool|mixed|string
      */
     public function getPosts(array $categories = null, $withSuccessorsCategories = true, array $parameters = null)
@@ -159,29 +158,38 @@ class WordpressApiClient
         $searchString = "";
         if (empty($categories) === false) {
             $orderedCategories = $this->getOrderedCategories();
+            $categoriesSlugs = array_column($orderedCategories, 'slug', 'id');
             foreach ($categories as $category) {
-                // add this category
-                $categoriesForSearch[] = $category;
-                if ($withSuccessorsCategories === true) {
-                    // add all successors for this category
-                    $categoriesForSearch = array_merge($categoriesForSearch, $orderedCategories[$category]['successors']);
+                // if slug was used instead of category id, find category id first
+                if (is_int($category) === false) {
+                    $category = array_search($category, $categoriesSlugs);
+                }
+                // add this category - if not empty
+                if (empty($orderedCategories[$category]) === false) {
+                    $categoriesForSearch[] = $category;
+                    if ($withSuccessorsCategories === true) {
+                        // add all successors for this category - if there are some
+                        if (empty($orderedCategories[$category]['successors']) === false) {
+                            $categoriesForSearch = array_merge($categoriesForSearch, $orderedCategories[$category]['successors']);
+                        }
+                    }
                 }
             }
             // filter double values
             $categoriesForSearch = array_unique($categoriesForSearch);
             // generate full string for search / filter
-            $searchString = "category=" . implode('&category=', $categoriesForSearch);
+            $searchString = "categories[]=" . implode('&categories[]=', $categoriesForSearch);
 
             // we cannot move this if request out of this if request
             if (empty($parameters) === false) {
                 // the string has to be set only
-                $searchString .="&";
+                $searchString .= "&";
             }
         }
 
         // add other parameters to search string
         if (empty($parameters) === false) {
-            $searchString.= http_build_query($parameters,'','&');
+            $searchString .= http_build_query($parameters, '', '&');
         }
 
         // get and return the api data
