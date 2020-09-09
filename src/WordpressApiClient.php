@@ -198,7 +198,6 @@ class WordpressApiClient
         if (empty($categories) === true) {
             $categories = $this->restrictedRootCategories;
         }
-
         // filter by category if necessary
         if (empty($categories) === false || empty($this->restrictedRootCategories) === false) {
             $orderedCategories = $this->getOrderedCategories();
@@ -218,6 +217,11 @@ class WordpressApiClient
                         }
                     }
                 }
+            }
+
+            if (empty($categoriesForSearch) === true) {
+                // searched categories not found
+                return [];
             }
             // filter double values
             $categoriesForSearch = array_unique($categoriesForSearch);
