@@ -57,5 +57,9 @@ array(
 )
 ``` 
 to get also the URL of featured image (for example). 
+The third parameter is usually set to true, which means that the function checks if 
+a) restricted categories are set and 
+b) one of the categories of the post is in restricted categories or subcategories
+
 
 Is there something missing? Open an issue on github: [https://github.com/sneakyx/wordpressApiClient/issues](https://github.com/sneakyx/wordpressApiClient/issues)

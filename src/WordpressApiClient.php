@@ -246,18 +246,62 @@ class WordpressApiClient
 
     /**
      * get single post
-     * @param int $id
+     * @param int $id // id of post to get
      * @param array|null $parameters // use parameters as array: ['parameter1'=>'value1']
+     * @param bool $checkIfInRestrictedCategories // check if post is in restricted categories = if we are allowed to see this post
      * @return bool|mixed|string
      */
-    public function getPost(int $id, array $parameters = null)
+    public function getPost(int $id, array $parameters = null, bool $checkIfInRestrictedCategories = true)
     {
         $parameterString = '';
         // concat paramaters
         if (empty($parameters) === false) {
             $parameterString .= http_build_query($parameters, '', '&');
         }
-        // get and return the api data
-        return $this->getApiData("posts/{$id}?{$parameterString}");
+        // get the api data
+
+        $post = $this->getApiData("posts/{$id}?{$parameterString}");
+        if ($checkIfInRestrictedCategories === true && empty($this->restrictedRootCategories) === false) {
+            foreach ($this->restrictedRootCategories as $restrictedRootCategory) {
+                if ($this->isPostInCategory($post, $restrictedRootCategory, true) === true) {
+                    return $post;
+                }
+            }
+            // it is not in restricted categories
+            return false;
+        }
+        // return post here, because restricted categories shouldn't be checked
+        return $post;
     }
+
+    /**
+     * @param $post
+     * @param $category
+     * @param bool $alsoSubcategories
+     * @return bool
+     */
+    protected function isPostInCategory($post, $category, $alsoSubcategories=true)
+    {
+        // empty cases
+        if (empty($post) === true || empty($post['categories']) === true) {
+            return false;
+        }
+        // get all categories to check if there is a subcategory
+        $orderedCategories = $this->getOrderedCategories();
+        $categoriesSlugs = array_column($orderedCategories, 'slug', 'id');
+        // check every category in post
+        foreach ($post['categories'] as $postCategory) {
+            if (is_int($category) === false) {
+                $category = array_search($category, $categoriesSlugs);
+            }
+            if (
+                $postCategory === $category || // post is in exact this category
+                (in_array($postCategory, $this->getOrderedCategories()[$category]['successors'])&& $alsoSubcategories===true) // post is in subcategory
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

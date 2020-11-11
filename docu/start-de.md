@@ -12,7 +12,7 @@ Der Konstruktor loggt sich direkt ein, weitere Requests sind nun möglich. Mit H
 `$wordpressApiClient->getApiData($path,$returnAsArray)`
 Die Variable `$path` kann wie in [https://developer.wordpress.org/rest-api/reference/](https://developer.wordpress.org/rest-api/reference/) beschrieben genutzt werden- Standard ist `"posts"`
 
-Wenn `$returnAsArray` false ist, wird ein JSON-encodeter String zurückgegeben. (Standard ist `true`), also kommt normalerwweise ein Array zurück.
+Wenn `$returnAsArray` false ist, wird ein JSON-encodeter String zurückgegeben. (Standard ist `true`), also kommt normalerweise ein Array zurück.
 
 Ich habe es mit `posts`, `users` und `categories` getestet, andere sollten aber auch gehen.
 
@@ -53,7 +53,7 @@ array(
 
 ### einzelnen Beitrag auslesen
 `$wordpressApiClient->getPost()` gibt einen einzelnen Beitrag zurück.
-Der erste Parameter`id` muss angegeben werden, der zweite Parameter `parameters` benötigt ein Array, wie bei Funktion getPosts() beschrieben.
+Der erste Parameter `id` muss angegeben werden, der zweite Parameter `parameters` benötigt ein Array, wie bei Funktion getPosts() beschrieben.
 `parameters` muss nicht angegeben werden, aber die Angabe von 
 ```
 array(
@@ -61,5 +61,6 @@ array(
 )
 ``` 
 könnte sinnvoll sein, z.B. um auch die URL des Beitragsbildes zu erhalten. 
+Mit dem dritten Parameter kann geprüft werden, ob der Beitrag in den eingeschränkten (Sub-)Kategorien enthalten ist. 
 
 Wenn was fehlt, öffne einfach ein Ticket auf github (auf englisch): [https://github.com/sneakyx/wordpressApiClient/issues](https://github.com/sneakyx/wordpressApiClient/issues)
