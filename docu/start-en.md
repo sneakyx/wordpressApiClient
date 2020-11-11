@@ -23,7 +23,7 @@ The info about depth can be directly used for css-alignment-infos.
 You get also the direct `children` (1. generation) and all `successors` (all generations). This can be used for a special search (see next chapter).
 
 ### get all /filtered posts
-`$wordpressApiclient->getPosts()` is a very powerfull function.
+`$wordpressApiclient->getPosts()` is a very powerful function.
 If You use it without any parameters, you get 10  posts by the api (see Wordpress-API pagination). If the filter for main categories is set, only posts from these categories (and successor categories) are returned.
 
 The first parameter is a filter for categories. You have go give an **array** of category-ids and/or category-slugs. 
@@ -46,5 +46,16 @@ array(
 '_embed`=>true
 )
 ``` 
+
+### get a single post
+`$wordpressApiClient->getPost()` returns a single blog post entry.
+The first parameter `id` is a must, second parameter `parameters` need an array, as described in function getPosts().
+`parameter` can be left empty, but it could be wise to use 
+```
+array(
+'_embed`=>true
+)
+``` 
+to get also the URL of featured image (for example). 
 
 Is there something missing? Open an issue on github: [https://github.com/sneakyx/wordpressApiClient/issues](https://github.com/sneakyx/wordpressApiClient/issues)

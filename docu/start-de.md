@@ -50,4 +50,16 @@ array(
 )
 ``` 
 
+
+### einzelnen Beitrag auslesen
+`$wordpressApiClient->getPost()` gibt einen einzelnen Beitrag zurück.
+Der erste Parameter`id` muss angegeben werden, der zweite Parameter `parameters` benötigt ein Array, wie bei Funktion getPosts() beschrieben.
+`parameters` muss nicht angegeben werden, aber die Angabe von 
+```
+array(
+'_embed`=>true
+)
+``` 
+könnte sinnvoll sein, z.B. um auch die URL des Beitragsbildes zu erhalten. 
+
 Wenn was fehlt, öffne einfach ein Ticket auf github (auf englisch): [https://github.com/sneakyx/wordpressApiClient/issues](https://github.com/sneakyx/wordpressApiClient/issues)

@@ -184,6 +184,7 @@ class WordpressApiClient
     }
 
     /**
+     * get all posts
      * @param array|null $categories
      * @param bool $withSuccessorsCategories
      * @param array|null $parameters // use parameters as array: ['parameter1'=>'value1']
@@ -241,5 +242,22 @@ class WordpressApiClient
         }
         // get and return the api data
         return $this->getApiData("posts?{$searchString}");
+    }
+
+    /**
+     * get single post
+     * @param int $id
+     * @param array|null $parameters // use parameters as array: ['parameter1'=>'value1']
+     * @return bool|mixed|string
+     */
+    public function getPost(int $id, array $parameters = null)
+    {
+        $parameterString = '';
+        // concat paramaters
+        if (empty($parameters) === false) {
+            $parameterString .= http_build_query($parameters, '', '&');
+        }
+        // get and return the api data
+        return $this->getApiData("posts/{$id}?{$parameterString}");
     }
 }
