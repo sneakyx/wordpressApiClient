@@ -35,11 +35,19 @@ Die deutsche Wordpress-Version spricht hier übrigens von "Titelform".
 Der zweite Parameter sorgt dafür, dass auch innerhalb der Unterkategorien nach passenden Beiträgen gesucht wird. 
 Standard ist `true`- soll nur genau in dieser einen Kategorie gesucht werden, muss `false` gesetzt werden. 
 
-Der dritte Parameter soll genutzt werden, um weitere (Filter-)Parameter anzuhängen- und wird so benutzt:
+Der dritte Parameter kann so genutzt werden, um weitere (Filter-)Parameter anzuhängen:
 ```
 array(
 'parameter1'=>'value1',
 'parameter2'=>'value2'
 )
 ```
+
+Wenn ein Parameter nur mit Schlüssel und ohne Wert benutzt werden soll (z.B. `_embed`) kann `true` die Lösung sein:
+```
+array(
+'_embed`=>true
+)
+``` 
+
 Wenn was fehlt, öffne einfach ein Ticket auf github (auf englisch): [https://github.com/sneakyx/wordpressApiClient/issues](https://github.com/sneakyx/wordpressApiClient/issues)

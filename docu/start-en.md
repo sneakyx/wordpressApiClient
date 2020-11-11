@@ -40,5 +40,11 @@ array(
 'parameter2'=>'value2'
 )
 ```
+If you want to add a parameter with key and without value like `_embed` maybe usage of `true` might help:
+```
+array(
+'_embed`=>true
+)
+``` 
 
 Is there something missing? Open an issue on github: [https://github.com/sneakyx/wordpressApiClient/issues](https://github.com/sneakyx/wordpressApiClient/issues)
