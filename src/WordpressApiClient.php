@@ -304,4 +304,31 @@ class WordpressApiClient
         return false;
     }
 
+    /**
+     * @param $filename
+     * @param bool $caseSensitiv
+     * @return array
+     */
+    public function getMediaByFilename($filename, $caseSensitiv = true)
+    {
+        $mediafiles = [];
+        $page = 1;
+
+        do {
+            $media = $this->getApiData("media?page=$page");
+            foreach ($media as $file) {
+                if (array_key_exists('source_url', $file)) {
+                    if (($caseSensitiv === true && strpos($file['source_url'], $filename) !== false) || // case sensitiv search
+                        ($caseSensitiv === false && stripos($file['source_url'], $filename) !== false)) { // case insensitiv search
+                        $mediafiles[] = $file;
+                    }
+
+                }
+            }
+
+        } while (empty($response) === false);
+
+        return $mediafiles;
+    }
+
 }

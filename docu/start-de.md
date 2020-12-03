@@ -1,6 +1,6 @@
 ## Verwendung
 
-Derzeit gibt es 3 Funktionen
+Derzeit gibt es 5 Funktionen
 
 ### Login
 Für das Login muss zunächst ein Objekt erzeugt werden:
@@ -62,5 +62,13 @@ array(
 ``` 
 könnte sinnvoll sein, z.B. um auch die URL des Beitragsbildes zu erhalten. 
 Mit dem dritten Parameter kann geprüft werden, ob der Beitrag in den eingeschränkten (Sub-)Kategorien enthalten ist. 
+
+### Nach einem Dateinamen in den MediaOrdner suchen
+Wenn eine Datei zu Wordpress als Media hochgeladen wird, ist der Pfad zu dieser Datei leider mit einem zusätzlichen Pfad bestehend aus dem Datum festgelegt.
+Dieser Pfad kann meines Wissens nicht üebr die API direkt mit einer einfachen, einzelnen Abfrage geschehen.  
+Dafür gibt es die Funktion `$wordpressApiClient->getMediaByFilename()`.
+Der erste Parameter muss den Dateinamen (bzw einen Teil davon) enthalten.
+Mit Hilfe des zweiten Parameters kann die Suche auf Groß-/Kleinschreibung achten.
+
 
 Wenn was fehlt, öffne einfach ein Ticket auf github (auf englisch): [https://github.com/sneakyx/wordpressApiClient/issues](https://github.com/sneakyx/wordpressApiClient/issues)

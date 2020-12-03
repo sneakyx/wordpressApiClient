@@ -62,4 +62,10 @@ a) restricted categories are set and
 b) one of the categories of the post is in restricted categories or subcategories
 
 
+### Search for a filename
+If you want to access a file, that was uploaded to wordpress, the URL consists also of the uploaded date.
+As far as I know the wordpress API doesn't give you the possibility to search a file by filename with a single and simple API call.
+You can use the funktion `$wordpressApiClient->getMediaByFilename()`.
+First parameter is the (partial) filename, the second paramter toggles the case sensitivity.
+
 Is there something missing? Open an issue on github: [https://github.com/sneakyx/wordpressApiClient/issues](https://github.com/sneakyx/wordpressApiClient/issues)
