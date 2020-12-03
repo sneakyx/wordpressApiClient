@@ -1,5 +1,5 @@
 ## Usage
-At the moment, there are 3 functions implemented:
+At the moment, there are 5 functions implemented:
 
 ### Login
 First, you have to create a new WordpressApiClient-Object:
