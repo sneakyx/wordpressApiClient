@@ -261,7 +261,7 @@ class WordpressApiClient
     public function getPost(int $id, array $parameters = null, bool $checkIfInRestrictedCategories = true)
     {
         $parameterString = '';
-        // concat paramaters
+        // concat parameters
         if (empty($parameters) === false) {
             $parameterString .= http_build_query($parameters, '', '&');
         }
