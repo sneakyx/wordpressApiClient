@@ -28,10 +28,11 @@ class WordpressApiClient
 
     /**
      * WordpressApiClient constructor.
-     * @param $username // wordpress username
-     * @param $password // wordpress password
-     * @param $basicUrl // basic URL with or without trailing slash
-     * @param null $restrictedRootCategories // if you want to restric to one or more root categories, provide IDs or slugs
+     *
+     * @param       $username                  // wordpress username
+     * @param       $password                  // wordpress password
+     * @param       $basicUrl                  // basic URL with or without trailing slash
+     * @param null  $restrictedRootCategories  // if you want to restric to one or more root categories, provide IDs or slugs
      */
     public function __construct($username, $password, $basicUrl, $restrictedRootCategories = null)
     {
@@ -69,17 +70,18 @@ class WordpressApiClient
     /**
      * simple return api data by get call
      *
-     * @param string $path
-     * @param bool $returnAsArray
+     * @param string  $path
+     * @param bool    $returnAsArray
+     *
      * @return bool|mixed|string
      */
     public function getApiData($path = 'posts', $returnAsArray = true)
     {
-        curl_setopt_array($this->curlHandler, array(
+        curl_setopt_array($this->curlHandler, [
             CURLOPT_URL => "{$this->basicUrl}wp-json/wp/v2/{$path}",
             CURLOPT_POST => 0,
             CURLOPT_HEADER => 0,
-        ));
+        ]);
         $result = curl_exec($this->curlHandler);
         if ($returnAsArray === true) {
             // return as array
@@ -98,7 +100,7 @@ class WordpressApiClient
         // lazy loading, do api request only when there is nothing loaded yet
         if ($this->sortedCategories === null) {
             // if not loaded yet, load categories
-            $sortedCategories = array();
+            $sortedCategories = [];
 
             // get data from wordpress api
             $unsortedCategories = $this->getApiData('categories?per_page=100&orderby=id&_fields=id,name,slug,parent,meta');
@@ -156,15 +158,16 @@ class WordpressApiClient
             } else {
                 $this->sortedCategories = $sortedCategories;
             }
-
         }
         return $this->sortedCategories;
     }
 
     /**
      * recursive function to add ancestors info to list of categories- this is also necessary for generating succesors info later
+     *
      * @param $sortedCategories
      * @param $id
+     *
      * @return array
      */
     private function recursiveFindPathAndAncestors($sortedCategories, $id)
@@ -174,7 +177,7 @@ class WordpressApiClient
         } else {
 
             if ($sortedCategories[$id]['parent'] === null) {
-                return array();
+                return [];
             } else {
                 $recursiveAnswer = $this->recursiveFindPathAndAncestors($sortedCategories, $sortedCategories[$id]['parent']);
                 $recursiveAnswer[] = $sortedCategories[$id]['parent'];
@@ -185,9 +188,11 @@ class WordpressApiClient
 
     /**
      * get all posts
-     * @param array|null $categories
-     * @param bool $withSuccessorsCategories
-     * @param array|null $parameters // use parameters as array: ['parameter1'=>'value1']
+     *
+     * @param array|null  $categories
+     * @param bool        $withSuccessorsCategories
+     * @param array|null  $parameters  // use parameters as array: ['parameter1'=>'value1']
+     *
      * @return bool|mixed|string
      */
     public function getPosts(array $categories = null, $withSuccessorsCategories = true, array $parameters = null)
@@ -246,9 +251,11 @@ class WordpressApiClient
 
     /**
      * get single post
-     * @param int $id // id of post to get
-     * @param array|null $parameters // use parameters as array: ['parameter1'=>'value1']
-     * @param bool $checkIfInRestrictedCategories // check if post is in restricted categories = if we are allowed to see this post
+     *
+     * @param int         $id                             // id of post to get
+     * @param array|null  $parameters                     // use parameters as array: ['parameter1'=>'value1']
+     * @param bool        $checkIfInRestrictedCategories  // check if post is in restricted categories = if we are allowed to see this post
+     *
      * @return bool|mixed|string
      */
     public function getPost(int $id, array $parameters = null, bool $checkIfInRestrictedCategories = true)
@@ -275,12 +282,13 @@ class WordpressApiClient
     }
 
     /**
-     * @param $post
-     * @param $category
-     * @param bool $alsoSubcategories
+     * @param       $post
+     * @param       $category
+     * @param bool  $alsoSubcategories
+     *
      * @return bool
      */
-    protected function isPostInCategory($post, $category, $alsoSubcategories=true)
+    protected function isPostInCategory($post, $category, $alsoSubcategories = true)
     {
         // empty cases
         if (empty($post) === true || empty($post['categories']) === true) {
@@ -296,7 +304,7 @@ class WordpressApiClient
             }
             if (
                 $postCategory === $category || // post is in exact this category
-                (in_array($postCategory, $this->getOrderedCategories()[$category]['successors'])&& $alsoSubcategories===true) // post is in subcategory
+                (in_array($postCategory, $this->getOrderedCategories()[$category]['successors']) && $alsoSubcategories === true) // post is in subcategory
             ) {
                 return true;
             }
@@ -305,8 +313,9 @@ class WordpressApiClient
     }
 
     /**
-     * @param $filename
-     * @param bool $caseSensitiv
+     * @param       $filename
+     * @param bool  $caseSensitiv
+     *
      * @return array
      */
     public function getMediaByFilename($filename, $caseSensitiv = true)
@@ -322,11 +331,11 @@ class WordpressApiClient
                         ($caseSensitiv === false && stripos($file['source_url'], $filename) !== false)) { // case insensitiv search
                         $mediafiles[] = $file;
                     }
-
                 }
             }
-
-        } while (empty($response) === false);
+            // increase page for next occurences - thanks to Timo
+            $page++;
+        } while (empty($media) === false);
 
         return $mediafiles;
     }
