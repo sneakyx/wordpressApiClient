@@ -32,7 +32,7 @@ class WordpressApiClient
      * @param       $username                  // wordpress username
      * @param       $password                  // wordpress password
      * @param       $basicUrl                  // basic URL with or without trailing slash
-     * @param null  $restrictedRootCategories  // if you want to restric to one or more root categories, provide IDs or slugs
+     * @param null  $restrictedRootCategories  // if you want to restrict to one or more root categories, provide IDs or slugs
      */
     public function __construct($username, $password, $basicUrl, $restrictedRootCategories = null)
     {
