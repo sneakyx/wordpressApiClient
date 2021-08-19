@@ -77,5 +77,10 @@ Dafür gibt es die Funktion `$wordpressApiClient->getMediaByFilename()`.
 Der erste Parameter muss den Dateinamen (bzw einen Teil davon) enthalten.
 Mit Hilfe des zweiten Parameters kann die Suche auf Groß-/Kleinschreibung achten.
 
+### Überprüfen, ob eine Beitrags-ID existiert
+Um zu überprüfen, ob ein Beitrag oder ein Array von Beiträgen (noch) existiert, kann diese Funktion verwendet werden. 
+Bei einem einzelnen Beitrag kommt ein einzelnes true/false zurück, wenn die Funktion mit einem Array von ids aufgerufen wird, kommt ein Array zurück, bei dem die Schlüssel die 
+den aufgerufenen IDs entsprechen.
+`$wordpressApiClient->checkIfPostsExist`
 
 Wenn was fehlt, öffne einfach ein Ticket auf github (auf englisch): [https://github.com/sneakyx/wordpressApiClient/issues](https://github.com/sneakyx/wordpressApiClient/issues)

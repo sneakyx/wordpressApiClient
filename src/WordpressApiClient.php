@@ -37,6 +37,11 @@ class WordpressApiClient
     private $totalPagesLastCall = 0;
 
     /**
+     * @var int
+     */
+    private $lastStatusCode = 0;
+
+    /**
      * WordpressApiClient constructor.
      *
      * @param       $username                  // wordpress username
@@ -88,10 +93,11 @@ class WordpressApiClient
     public function getApiData($path = 'posts', $returnAsArray = true)
     {
         $headerSize = 0;
+        $headers['status'] = '';
         curl_setopt_array($this->curlHandler, [
             CURLOPT_URL => "{$this->basicUrl}wp-json/wp/v2/{$path}",
             CURLOPT_POST => 0,
-            CURLOPT_HEADER =>1,
+            CURLOPT_HEADER => 1,
             // this function is called by curl for each header received
             // source: https://stackoverflow.com/a/41135574/8398149 and improved
             CURLOPT_HEADERFUNCTION =>
@@ -101,6 +107,9 @@ class WordpressApiClient
                     $header = explode(':', $header, 2);
                     if (count($header) > 1) { // store only valid headers
                         $headers[strtolower(trim($header[0]))] = trim($header[1]);
+                    } elseif (substr($header[0], 0, 8) === 'HTTP/1.1') {
+                        // get status code
+                        $headers['status'] = intval(substr($header[0], 9, 3));
                     }
                     return $lenghtCurrentLine;
                 },
@@ -120,7 +129,8 @@ class WordpressApiClient
         } else {
             $this->totalPagesLastCall = 0;
         }
-
+        // add status info
+        $this->lastStatusCode = $headers['status'];
         $result = substr($fullResult, $headerSize);
         if ($returnAsArray === true) {
             // return as array
@@ -353,6 +363,7 @@ class WordpressApiClient
 
     /**
      * returns media URL by filename
+     *
      * @param       $filename
      * @param bool  $caseSensitiv
      *
@@ -381,7 +392,7 @@ class WordpressApiClient
     }
 
     /**
-     * returns amount of items for this filter
+     * returns ammount of items for this filter
      * @return int
      */
     public function getTotalAmountLastCall(): int
@@ -390,7 +401,7 @@ class WordpressApiClient
     }
 
     /**
-     * returns amount of pages for this filter
+     * returns ammount of pages for this filter
      * @return int
      */
     public function getTotalPagesLastCall(): int
@@ -398,5 +409,36 @@ class WordpressApiClient
         return $this->totalPagesLastCall;
     }
 
+    /**
+     * @return string
+     */
+    public function getLastStatusCode(): string
+    {
+        return $this->lastStatusCode;
+    }
 
+
+    /**
+     * if post(s) don't exists, return false
+     * if post(s) exist, return true
+     * you can check a single id or an array of ids
+     *
+     * @param array|int|string $posts
+     *
+     * @return array|bool
+     */
+    public function checkIfPostsExist($posts)
+    {
+        if (!is_array($posts)) {
+            $posts = intval($posts);
+            $this->getApiData("posts/$posts?context=edit");
+            return $this->lastStatusCode !== 404 ;
+        }
+        $resultArray=[];
+        foreach ($posts as $post) {
+            $this->getApiData("posts/$post?context=edit");
+            $resultArray[$post]= $this->lastStatusCode !== 404 ;
+        }
+        return $resultArray;
+    }
 }

@@ -73,4 +73,10 @@ As far as I know the wordpress API doesn't give you the possibility to search a 
 You can use the funktion `$wordpressApiClient->getMediaByFilename()`.
 First parameter is the (partial) filename, the second paramter toggles the case sensitivity.
 
+### check if a post or an array of posts exists
+If you want to check if a post id (still) exists, use this function.
+You can send an id as integer (or as string), but you can also send an array of ids.
+If you send a single id, you get a single true or false in return, otherwise an array. The keys are the ids the you sent. 
+`$wordpressApiClient->checkIfPostsExist`
+
 Is there something missing? Open an issue on github: [https://github.com/sneakyx/wordpressApiClient/issues](https://github.com/sneakyx/wordpressApiClient/issues)
