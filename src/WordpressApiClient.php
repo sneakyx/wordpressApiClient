@@ -53,7 +53,7 @@ class WordpressApiClient
         curl_setopt($this->curlHandler, CURLOPT_HEADER, 1);
         curl_setopt($this->curlHandler, CURLOPT_POST, 1);
         curl_setopt($this->curlHandler, CURLOPT_POSTFIELDS,
-            "log={$username}&pwd={$password}&testcookie=1");
+            "log={$username}&pwd={$password}");
         $result = curl_exec($this->curlHandler);
 
         // get cookie
