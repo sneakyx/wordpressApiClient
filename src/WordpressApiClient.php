@@ -333,7 +333,7 @@ class WordpressApiClient
                     }
                 }
             }
-            // increase page for next occurences - thanks to Timo
+            // increase page for next occurrences - thanks to Timo
             $page++;
         } while (empty($media) === false);
 
