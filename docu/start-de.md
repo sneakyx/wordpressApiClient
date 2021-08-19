@@ -17,10 +17,10 @@ Wenn `$returnAsArray` false ist, wird ein JSON-encodeter String zurückgegeben. 
 Ich habe es mit `posts`, `users` und `categories` getestet, andere sollten aber auch gehen.
 
 Es können ggfls. nicht alle Elemente mit einem API Aufruf geholt werden. Pro Seite werden als Standard 10 Elemente zurückgeschickt, 
-das Maximum liegt meines Wissens bei 100.
+das Maximum liegt meines Wissens bei 100. (Parameter `per_page`)
 Wenn es mehr als 100 Elemente gibt, müssen die Daten mit mehreren Aufrufen geholt werden. Dafür habe ich 2 Eigenschaften hinzugefügt.
 
-`$wordpressApiClient->getTotalAmountLastCall()` darin ist die Anzahl der Elemente die durch diesen Filter abgeholt werden können.
+`$wordpressApiClient->getTotalAmountLastCall()` darin ist die Anzahl der Elemente, die durch diesen Filter abgeholt werden können.
 `$wordpressApiClient->getTotalPagesLastCall()` hiermit bekommst Du die Anzahl der Seiten durch die aktuelle Filterung.
 
 ### Alle Kategorien mit weiteren, nützlichen Informationen erhalten

@@ -15,7 +15,7 @@ If `$returnAsArray` is set to false, it returns a json-encoded string. (standard
 
 This should work for all get requests- I tested it for `posts`, `users`and `categories`.
 
-Wordpress adds pagination. You can get more items with parameter per_page (standard is 10, maximum is 100). 
+Wordpress adds pagination. You can get more items with parameter `per_page` (standard is 10, maximum is 100). 
 So, if you have more than 100, you have to get all pages. To make it easier for You, I added the properties
 `$wordpressApiClient->getTotalAmountLastCall()` this returns the amount of all items in this filter.
 `$wordpressApiClient->getTotalPagesLastCall()` returns the amount of pages with this filter. 
