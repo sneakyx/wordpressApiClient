@@ -77,12 +77,26 @@ class WordpressApiClient
      */
     public function getApiData($path = 'posts', $returnAsArray = true)
     {
+        $headerSize = 0;
         curl_setopt_array($this->curlHandler, [
             CURLOPT_URL => "{$this->basicUrl}wp-json/wp/v2/{$path}",
             CURLOPT_POST => 0,
-            CURLOPT_HEADER => 0,
+            CURLOPT_RETURNTRANSFER => 1,
+            // this function is called by curl for each header received
+            // source: https://stackoverflow.com/a/41135574/8398149 and improved
+            CURLOPT_HEADERFUNCTION =>
+                function ($curl, $header) use (&$headers, &$headerSize) {
+                    $lenghtCurrentLine = strlen($header);
+                    $headerSize += $lenghtCurrentLine;
+                    $header = explode(':', $header, 2);
+                    if (count($header) > 1) { // store only vadid headers
+                        $headers[strtolower(trim($header[0]))][] = trim($header[1]);
+                    }
+                    return $lenghtCurrentLine;
+                },
         ]);
-        $result = curl_exec($this->curlHandler);
+        $fullResult = curl_exec($this->curlHandler);
+        $result = substr($fullResult, $headerSize);
         if ($returnAsArray === true) {
             // return as array
             return json_decode($result, true);
