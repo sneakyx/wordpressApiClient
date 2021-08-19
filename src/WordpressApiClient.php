@@ -381,7 +381,7 @@ class WordpressApiClient
     }
 
     /**
-     * returns ammount of items for this filter
+     * returns amount of items for this filter
      * @return int
      */
     public function getTotalAmountLastCall(): int
@@ -390,7 +390,7 @@ class WordpressApiClient
     }
 
     /**
-     * returns ammount of pages for this filter
+     * returns amount of pages for this filter
      * @return int
      */
     public function getTotalPagesLastCall(): int
