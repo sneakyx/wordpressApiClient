@@ -27,6 +27,16 @@ class WordpressApiClient
     private $restrictedRootCategories = null;
 
     /**
+     * @var int
+     */
+    private $totalAmountLastCall = 0;
+
+    /**
+     * @var int
+     */
+    private $totalPagesLastCall = 0;
+
+    /**
      * WordpressApiClient constructor.
      *
      * @param       $username                  // wordpress username
@@ -81,7 +91,7 @@ class WordpressApiClient
         curl_setopt_array($this->curlHandler, [
             CURLOPT_URL => "{$this->basicUrl}wp-json/wp/v2/{$path}",
             CURLOPT_POST => 0,
-            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_HEADER =>1,
             // this function is called by curl for each header received
             // source: https://stackoverflow.com/a/41135574/8398149 and improved
             CURLOPT_HEADERFUNCTION =>
@@ -89,13 +99,28 @@ class WordpressApiClient
                     $lenghtCurrentLine = strlen($header);
                     $headerSize += $lenghtCurrentLine;
                     $header = explode(':', $header, 2);
-                    if (count($header) > 1) { // store only vadid headers
-                        $headers[strtolower(trim($header[0]))][] = trim($header[1]);
+                    if (count($header) > 1) { // store only valid headers
+                        $headers[strtolower(trim($header[0]))] = trim($header[1]);
                     }
                     return $lenghtCurrentLine;
                 },
         ]);
+
         $fullResult = curl_exec($this->curlHandler);
+        // add infos for pagination: total items for this filter
+        if (key_exists('x-wp-total', $headers)) {
+            $this->totalAmountLastCall = intval($headers['x-wp-total']);
+        } else {
+            $this->totalAmountLastCall = 0;
+        }
+        // add infos for pagination: total ammount of pages for this filter
+        if (key_exists('x-wp-totalpages', $headers)) {
+            // set totalAmount of pages
+            $this->totalPagesLastCall = intval($headers['x-wp-totalpages']);
+        } else {
+            $this->totalPagesLastCall = 0;
+        }
+
         $result = substr($fullResult, $headerSize);
         if ($returnAsArray === true) {
             // return as array
@@ -327,6 +352,7 @@ class WordpressApiClient
     }
 
     /**
+     * returns media URL by filename
      * @param       $filename
      * @param bool  $caseSensitiv
      *
@@ -353,5 +379,24 @@ class WordpressApiClient
 
         return $mediafiles;
     }
+
+    /**
+     * returns ammount of items for this filter
+     * @return int
+     */
+    public function getTotalAmountLastCall(): int
+    {
+        return $this->totalAmountLastCall;
+    }
+
+    /**
+     * returns ammount of pages for this filter
+     * @return int
+     */
+    public function getTotalPagesLastCall(): int
+    {
+        return $this->totalPagesLastCall;
+    }
+
 
 }
