@@ -113,7 +113,7 @@ class WordpressApiClient
                 }
             }
 
-            // create ancestors path
+            // create ancerstors path
             foreach ($sortedCategories as &$sortedCategory) {
                 $sortedCategory['ancestors'] = $this->recursiveFindPathAndAncestors($sortedCategories, $sortedCategory['id']);
                 $sortedCategory['depth'] = count($sortedCategory['ancestors']);
@@ -125,10 +125,10 @@ class WordpressApiClient
             foreach ($sortedCategories as $sortedCategory) {
                 // not neccessary, main categories doesn't have ancestors/ parents
                 if ($sortedCategory['depth'] > 0) {
-                    // children are first-level children only, no grandchildren or great-(great-...)-children
+                    // childrens are first-level children only, no grandchildren or great-(great-...)-children
                     $sortedCategories[$sortedCategory['parent']]['children'][] = $sortedCategory['id'];
                     foreach ($sortedCategory['ancestors'] as $ancestorId) {
-                        // add to successor list of all successors
+                        // add to succesor list of all successors
                         $sortedCategories[$ancestorId]['successors'][] = $sortedCategory['id'];
                     }
                 }
@@ -197,7 +197,7 @@ class WordpressApiClient
      */
     public function getPosts(array $categories = null, $withSuccessorsCategories = true, array $parameters = null)
     {
-        // initialize search string
+        // initalize search string
         $searchString = "";
 
         // when there is a restriction, ensure there is a lazy load of categories
@@ -261,7 +261,7 @@ class WordpressApiClient
     public function getPost(int $id, array $parameters = null, bool $checkIfInRestrictedCategories = true)
     {
         $parameterString = '';
-        // concat parameters
+        // concat paramaters
         if (empty($parameters) === false) {
             $parameterString .= http_build_query($parameters, '', '&');
         }
