@@ -153,6 +153,12 @@ class WordpressApiClient
 
             // get data from wordpress api
             $unsortedCategories = $this->getApiData('categories?per_page=100&orderby=id&_fields=id,name,slug,parent,meta');
+            //ensure to load all categories when there are more than 100
+            if ($this->totalPagesLastCall > 1) {
+                for ($page = 2; $page <= $this->totalPagesLastCall; $page++) {
+                    $unsortedCategories = array_merge($unsortedCategories, $this->getApiData("categories?per_page=100&page={$page}&orderby=id&_fields=id,name,slug,parent,meta"));
+                }
+            }
             // set key from id
             foreach ($unsortedCategories as &$category) {
                 $sortedCategories[$category['id']] = $category;
@@ -169,7 +175,6 @@ class WordpressApiClient
             }
             // remove reference - see https://www.php.net/manual/en/control-structures.foreach.php
             unset($sortedCategory);
-
             // add ancestors and (direct) children to categories
             foreach ($sortedCategories as $sortedCategory) {
                 // not neccessary, main categories doesn't have ancestors/ parents
@@ -423,7 +428,7 @@ class WordpressApiClient
      * if post(s) exist, return true
      * you can check a single id or an array of ids
      *
-     * @param array|int|string $posts
+     * @param array|int  $posts
      *
      * @return array|bool
      */
@@ -432,12 +437,12 @@ class WordpressApiClient
         if (!is_array($posts)) {
             $posts = intval($posts);
             $this->getApiData("posts/$posts?context=edit");
-            return $this->lastStatusCode !== 404 ;
+            return $this->lastStatusCode !== 404;
         }
-        $resultArray=[];
+        $resultArray = [];
         foreach ($posts as $post) {
             $this->getApiData("posts/$post?context=edit");
-            $resultArray[$post]= $this->lastStatusCode !== 404 ;
+            $resultArray[$post] = $this->lastStatusCode !== 404;
         }
         return $resultArray;
     }
