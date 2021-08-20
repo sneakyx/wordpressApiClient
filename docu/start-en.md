@@ -1,5 +1,5 @@
 ## Usage
-At the moment, there are 5 functions implemented:
+At the moment, there are 7 functions implemented:
 
 ### Login
 First, you have to create a new WordpressApiClient-Object:
@@ -77,6 +77,11 @@ First parameter is the (partial) filename, the second paramter toggles the case 
 If you want to check if a post id (still) exists, use this function.
 You can send an id as integer (or as string), but you can also send an array of ids.
 If you send a single id, you get a single true or false in return, otherwise an array. The keys are the ids the you sent. 
-`$wordpressApiClient->checkIfPostsExist`
+`$wordpressApiClient->checkIfPostsExist()`
+
+### get all tags
+I added a function for easy receiving all tags. They are sorted by usage. It is not possible to filter them by usage in categories,
+so you get also tags from "not allowed" categories.
+`$wordpressApiClient->getTags()`
 
 Is there something missing? Open an issue on github: [https://github.com/sneakyx/wordpressApiClient/issues](https://github.com/sneakyx/wordpressApiClient/issues)

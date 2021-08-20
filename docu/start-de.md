@@ -1,6 +1,6 @@
 ## Verwendung
 
-Derzeit gibt es 5 Funktionen
+Derzeit gibt es 7 Funktionen
 
 ### Login
 Für das Login muss zunächst ein Objekt erzeugt werden:
@@ -81,6 +81,11 @@ Mithilfe des zweiten Parameters kann die Suche auf Groß-/Kleinschreibung achten
 Um zu überprüfen, ob ein Beitrag oder ein Array von Beiträgen (noch) existiert, kann diese Funktion verwendet werden. 
 Bei einem einzelnen Beitrag kommt ein einzelnes true/false zurück, wenn die Funktion mit einem Array von ids aufgerufen wird, kommt ein Array zurück, bei dem die Schlüssel die 
 den aufgerufenen IDs entsprechen.
-`$wordpressApiClient->checkIfPostsExist`
+`$wordpressApiClient->checkIfPostsExist()`
+
+### Schlagworte abholen
+Die Funktion `$wordpressApiClient->getTags()` ermöglicht ein problemloses Abholen aller(!) Schlagworte. Diese sind nach der Häufigkeit der Verwendung sortiert.
+Leider können auf diesem Weg die Schlagworte nicht nach einer Oberkategorie limitiert werden- es werden also auch Schlagworte angezeigt, 
+die ausserhalb der zulässigen Kategorien in Beiträgen verwendet werden. 
 
 Wenn was fehlt, öffne einfach ein Ticket auf github (auf englisch): [https://github.com/sneakyx/wordpressApiClient/issues](https://github.com/sneakyx/wordpressApiClient/issues)
