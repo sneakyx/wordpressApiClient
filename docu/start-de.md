@@ -1,6 +1,6 @@
 ## Verwendung
 
-Derzeit gibt es 7 Funktionen
+Derzeit gibt es 9 Funktionen
 
 ### Login
 Für das Login muss zunächst ein Objekt erzeugt werden:
@@ -87,5 +87,9 @@ den aufgerufenen IDs entsprechen.
 Die Funktion `$wordpressApiClient->getTags()` ermöglicht ein problemloses Abholen aller(!) Schlagworte. Diese sind nach der Häufigkeit der Verwendung sortiert.
 Leider können auf diesem Weg die Schlagworte nicht nach einer Oberkategorie limitiert werden- es werden also auch Schlagworte angezeigt, 
 die ausserhalb der zulässigen Kategorien in Beiträgen verwendet werden. 
+
+### Benutzer holen
+Mithilfe der Funktion `$wordpressApiClient->getUsers()` können alle Benutzer abgeholt werden, unabhängig von deren Verwendung innerhalb der Oberkategorien.
+
 
 Wenn was fehlt, öffne einfach ein Ticket auf github (auf englisch): [https://github.com/sneakyx/wordpressApiClient/issues](https://github.com/sneakyx/wordpressApiClient/issues)

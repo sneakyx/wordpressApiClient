@@ -32,6 +32,11 @@ class WordpressApiClient
     private $restrictedRootCategories = null;
 
     /**
+     * @var null|array
+     */
+    private $users = null;
+
+    /**
      * @var int
      */
     private $totalAmountLastCall = 0;
@@ -459,14 +464,44 @@ class WordpressApiClient
     {
         // lazy loading, do api request only when there is nothing loaded yet
         if ($this->sortedTags === null) {
-            $this->sortedTags = $this->getApiData('tags?per_page=100&orderby=count&order=desc');
+            $tags = $this->getApiData('tags?per_page=100&orderby=count&order=desc');
             // ensure to load all tags when there are more than 100
             if ($this->totalPagesLastCall > 1) {
                 for ($page = 2; $page <= $this->totalPagesLastCall; $page++) {
-                    $this->sortedTags = array_merge($this->sortedTags, $this->getApiData("tags?per_page=100&page={$page}&orderby=count&order=desc"));
+                    $tags = array_merge($tags, $this->getApiData("tags?per_page=100&page={$page}&orderby=count&order=desc"));
                 }
             }
+            $sortedTags = [];
+            foreach ($tags as $tag) {
+                $sortedTags[$tag['id']] = $tag;
+            }
+            $this->sortedTags = $sortedTags;
         }
         return $this->sortedTags;
     }
+
+    /**
+     * @return array|null
+     */
+    public function getUsers()
+    {
+        // lazy loading, do api request only when there is nothing loaded yet
+        if ($this->users === null) {
+
+            $users = $this->getApiData('users?per_page=100');
+            // ensure to load all users when there are more than 100
+            if ($this->totalPagesLastCall > 1) {
+                for ($page = 2; $page <= $this->totalPagesLastCall; $page++) {
+                    $users = array_merge($users, $this->getApiData("users?per_page=100&page={$page}"));
+                }
+            }
+            $sortedUsers = [];
+            foreach ($users as $user) {
+                $sortedUsers[$user['id']] = $user;
+            }
+            $this->users = $sortedUsers;
+        }
+        return $this->users;
+    }
+
 }
