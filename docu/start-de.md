@@ -72,10 +72,10 @@ Mit dem dritten Parameter kann geprüft werden, ob der Beitrag in den eingeschr�
 
 ### Nach einem Dateinamen in den MediaOrdner suchen
 Wenn eine Datei zu Wordpress als Media hochgeladen wird, ist der Pfad zu dieser Datei leider mit einem zusätzlichen Teilpfad bestehend aus dem Datum festgelegt.
-Dieser Pfad kann meines Wissens nicht über die API direkt mit einer einfachen, einzelnen Abfrage gefunden werden.  
+Dieser Pfad kann meines Wissens nicht über die API direkt mit einer einfachen, einzelnen Abfrage gefunden werden.
 Dafür gibt es die Funktion `$wordpressApiClient->getMediaByFilename()`.
 Der erste Parameter muss den Dateinamen (bzw einen Teil davon) enthalten.
-Mit Hilfe des zweiten Parameters kann die Suche auf Groß-/Kleinschreibung achten.
+Mithilfe des zweiten Parameters kann die Suche auf Groß-/Kleinschreibung achten.
 
 ### Überprüfen, ob eine Beitrags-ID existiert
 Um zu überprüfen, ob ein Beitrag oder ein Array von Beiträgen (noch) existiert, kann diese Funktion verwendet werden. 
