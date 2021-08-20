@@ -424,7 +424,7 @@ class WordpressApiClient
 
 
     /**
-     * if post(s) don't exists, return false
+     * if post(s) don't exist, return false
      * if post(s) exist, return true
      * you can check a single id or an array of ids
      *
