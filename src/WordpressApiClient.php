@@ -24,6 +24,11 @@ class WordpressApiClient
     /**
      * @var null|array
      */
+    private $sortedTags = null;
+
+    /**
+     * @var null|array
+     */
     private $restrictedRootCategories = null;
 
     /**
@@ -445,5 +450,23 @@ class WordpressApiClient
             $resultArray[$post] = $this->lastStatusCode !== 404;
         }
         return $resultArray;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getTags()
+    {
+        // lazy loading, do api request only when there is nothing loaded yet
+        if ($this->sortedTags === null) {
+            $this->sortedTags = $this->getApiData('tags?per_page=100&orderby=count&order=desc');
+            // ensure to load all tags when there are more than 100
+            if ($this->totalPagesLastCall > 1) {
+                for ($page = 2; $page <= $this->totalPagesLastCall; $page++) {
+                    $this->sortedTags = array_merge($this->sortedTags, $this->getApiData("tags?per_page=100&page={$page}&orderby=count&order=desc"));
+                }
+            }
+        }
+        return $this->sortedTags;
     }
 }
